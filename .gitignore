@@ -1,3 +1,11 @@
+###### CUSTOM SETTINGS ######
+pretrained_models/
+preprocessed_wavs/
+
+
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
