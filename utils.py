@@ -8,3 +8,7 @@ def create_dir(*args):
         if not os.path.exists(path):
                 os.mkdir(path)
         return path
+
+
+def write_meta():
+	pass
