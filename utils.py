@@ -10,5 +10,6 @@ def create_dir(*args):
         return path
 
 
-def write_meta():
-	pass
+def write_meta(out_filename, transcript):
+	with open(out_filename, "w") as f:
+		f.write(transcript)

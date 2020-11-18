@@ -2,8 +2,11 @@ import sys
 import configs as cfg
 
 from video2wav import Video2Wav_Converter
-from segment_and_transcribe_speech import Segment_Speech, Transcribe_Speech
+from segment_speech import Segment_Speech
+from transcribe_speech import Transcribe_Speech
+
 from utils import create_dir
+
 
 def convert_video_to_wav():
 
@@ -19,22 +22,41 @@ def convert_video_to_wav():
 
 
 
-def segment_and_transcribe_speech():
+def segment_speech():
 
 	create_dir(cfg.preprocessed_wav_savepath)
-	create_dir(cfg.segmented_wav_path)
+	create_dir(cfg.segmented_wav_savepath)
 
-	ss, ts = Segment_Speech(), Transcribe_Speech()
+	ss = Segment_Speech(in_unsegmented_wav_path=cfg.unsegmented_input_wav_path,
+			    out_wav_savepath = cfg.segmented_wav_savepath,
+			    input_file_format = cfg.segmentation_input_wav_format,
+			    sampling_rate = cfg.audio_sampling_rate,
+			    min_silence_len=400,
+			    keep_silence=100,
+			    silence_chunk_len=100,
+			    silence_thresh=-40, 
+			    skip_idx=0)
 	ss.do()
+
+
+def transcribe_speech():
+
+	ts = Transcribe_Speech(in_segmented_wav_path = cfg.segmented_input_wav_path,
+			       out_meta_filename = cfg.meta_name,
+			       input_file_format = cfg.transcription_input_wav_format,
+			       sampling_rate = cfg.audio_sampling_rate,
+			       language_code=cfg.language_code)
 	ts.do()
 
 
 if __name__ == "__main__":
 
-	assert len(sys.argv) == 3, "[ERROR] option must be provided!"
+	assert len(sys.argv) == 2, "[ERROR] option must be provided!"
 
-	if sys.argv[1].lower() in ["True", "1"]:
+	if sys.argv[1] in [0, "0"]:
 		convert_video_to_wav()
 
-	if sys.argv[2].lower() in ["True", "1"]:
+	elif sys.argv[1] in [1, "1"]:
 		segment_speech()
+	elif sys.argv[1] in [2, "2"]:
+		transcribe_speech()

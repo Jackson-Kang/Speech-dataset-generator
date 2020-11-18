@@ -3,7 +3,6 @@ from multiprocessing import Pool
 import ffmpeg
 import numpy as np
 import glob, sys
-import librosa
 
 from utils import *
 import configs as cfg

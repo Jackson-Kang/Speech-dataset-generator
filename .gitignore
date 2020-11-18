@@ -1,10 +1,11 @@
 ###### CUSTOM SETTINGS ######
 pretrained_models/
 preprocessed_wavs/
+google_api_credentials/
 
 
-
-
+# vim temp file
+*.swp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
