@@ -30,7 +30,7 @@ export GOOGLE_APPLICATION_CREDENTIALS="/home/user/Speech-dataset-generator/googl
 ```
 
 ## 3. Generate speech dataset
-Please set hyperparameter in "configs.py" and make sure that "<input_video_data_path>" variable is correctly point "<your-path-to-video-dataset>". After that, you can run this program via a shell script, "run.sh" file. In the project repository, just simply type following command:
+Please set hyperparameter in "configs.py" and make sure that "<input_video_data_path>" variable is correctly point "<your_path_to_video_dataset>". After that, you can run this program via a shell script, "run.sh" file. In the project repository, just simply type following command:
 ```
 bash run.sh
 ```
