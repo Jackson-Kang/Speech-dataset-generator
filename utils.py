@@ -13,3 +13,8 @@ def create_dir(*args):
 def write_meta(out_filename, transcript):
 	with open(out_filename, "w") as f:
 		f.write(transcript)
+
+def read_meta(filename):
+	with open(filename, "r") as f:
+		contents = f.readlines()
+	return contents

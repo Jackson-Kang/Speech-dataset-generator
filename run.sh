@@ -1,4 +1,4 @@
-export GOOGLE_APPLICATION_CREDENTIALS="YOUR-GOOGLE.CREDENTIALS.json"
+export GOOGLE_APPLICATION_CREDENTIALS="/home/minsu/hdd/Speech-dataset-generator/google_api_credentials/smilegate20-data-generator-3aa2df790228.json"
 
 
 # Step 1: video2wav

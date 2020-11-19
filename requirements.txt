@@ -1,0 +1,7 @@
+spleeter==2.0.1
+numpy==1.18.1
+pydub==0.24.1
+tqdm==4.52.0
+google-cloud-speech==2.0.1
+ffmpeg-python==0.2.0
+

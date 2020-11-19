@@ -9,18 +9,20 @@ import glob
 NUM_JOBS = cfg.num_jobs
 
 class Segment_Speech():
-	def __init__(self, in_unsegmented_wav_path, out_wav_savepath, input_file_format="wav", sampling_rate="22050", silence_thresh=-40, min_silence_len=400, silence_chunk_len=100, keep_silence=100, skip_idx=0):
+	def __init__(self, in_unsegmented_wav_path, out_wav_savepath, input_file_format="wav", sampling_rate="22050", resampling_rate=None, silence_thresh=-40, min_silence_len=400, silence_chunk_len=100, keep_silence=100, skip_idx=0):
 		
 		wav_path = get_path(in_unsegmented_wav_path, "**/vocals.{}".format(input_file_format))
 		self.wav_file_list = glob.glob(wav_path, recursive=True)
 		self.out_wav_savepath = out_wav_savepath
 
+		self.resampling_rate =resampling_rate
 		self.silence_chunk_len, self.silence_thresh, self.min_silence_len, self.keep_silence, self.skip_idx = silence_chunk_len, silence_thresh, min_silence_len, keep_silence, skip_idx
 
 	def job(self, in_wav_filename):
-
-		out_wav_filepath = create_dir(self.out_wav_savepath, in_wav_filename.split("/")[-2])
-		self.__segment_speech(in_wav_filename, out_wav_filepath, self.silence_chunk_len, self.silence_thresh, self.min_silence_len, self.keep_silence, self.skip_idx)
+		out_wav_filename_prefix = in_wav_filename.split("/")[-2]
+		out_wav_filepath = create_dir(self.out_wav_savepath, out_wav_filename_prefix)
+		out_wav_filepath = get_path(out_wav_filepath, out_wav_filename_prefix)
+		self.__segment_speech(in_wav_filename, out_wav_filepath, self.resampling_rate, self.silence_chunk_len, self.silence_thresh, self.min_silence_len, self.keep_silence, self.skip_idx)
 
 
 	def do(self):
@@ -32,8 +34,12 @@ class Segment_Speech():
 		print("\n[LOG] Finish segmenting!")
 
 
-	def __segment_speech(self, in_wav_filename, out_wav_filepath,  silence_chunk_len, silence_thresh, min_silence_len, keep_silence, skip_idx):
+	def __segment_speech(self, in_wav_filename, out_wav_filepath, resampling_rate="22050", silence_chunk_len=100, silence_thresh=-40, min_silence_len=400, keep_silence=100, skip_idx=0):
 		audio = AudioSegment.from_file(in_wav_filename)
+
+		if resampling_rate is not None:
+			audio = audio.set_frame_rate(resampling_rate)
+
 		not_silence_ranges = silence.detect_nonsilent(audio,
 							      min_silence_len=silence_chunk_len, 
 							      silence_thresh=silence_thresh)
@@ -52,7 +58,7 @@ class Segment_Speech():
 		for idx, (start_idx, end_idx) in enumerate(edges[skip_idx:]):
 			start_idx = max(0, start_idx - keep_silence)
 			end_idx += keep_silence
-			target_audio_path = "{}/{:04d}.wav".format(out_wav_filepath, idx)
+			target_audio_path = "{}_{:04d}.wav".format(out_wav_filepath, idx)
 			segment = audio[start_idx: end_idx]
 			segment.export(target_audio_path, "wav")
 			audio_paths.append(target_audio_path)
